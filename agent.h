@@ -140,7 +140,7 @@ public:
 				~Node()
 				{
 					for(Node* child : children)
-						child->~Node();
+						delete child;
 				};
 				bool is_unvisited()
 				{
@@ -169,7 +169,7 @@ public:
 			if(child->is_unvisited())
 				uct_score = DBL_MAX;
 			else
-				uct_score = (child->w / child->n) + c * sqrt(log(root->n)/child->n);
+				uct_score = ((double)child->w / child->n) + c * sqrt(log(root->n)/child->n);
 			if(uct_score > max_score)
 			{
 				max_score = uct_score;
@@ -299,19 +299,18 @@ public:
 		}
 		board current_board(state);
 		Node *best_node = select_child(current_board, root, root, 0.000000000001);
-		// for(Node *child:root->children)
-		// 	{
 
-		// 	}
-		// std::cout<<state<<std::endl;
-		if(best_node)
-			return best_node->node_move;
+		action::place best_move = best_node->node_move;
+		delete root;
+		
+		if(best_move)
+			return best_move;
 		else
 		{
 			// std::cout<<state<<std::endl;
 			return action();
 		}
-			
+		
 	}
 	
 	board::piece_type reverse_player(board::piece_type one_side)
