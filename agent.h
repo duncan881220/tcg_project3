@@ -152,7 +152,7 @@ public:
 				}
 		};
 
-	Node *select_child(board& state, Node *node, Node *root, double c = sqrt(2.0))
+	Node *select_child(board& state, Node *node, double c = sqrt(2.0))
 	{
 		double uct_score;
 		double max_score = -1;
@@ -169,7 +169,7 @@ public:
 			if(child->is_unvisited())
 				uct_score = DBL_MAX;
 			else
-				uct_score = ((double)child->w / child->n) + c * sqrt(log(root->n)/child->n);
+				uct_score = ((double)child->w / child->n) + c * sqrt(log(child->parent->n)/child->n);
 			if(uct_score > max_score)
 			{
 				max_score = uct_score;
@@ -191,7 +191,7 @@ public:
 			// std::cout<<"select while"<<std::endl;
 			// if(node->node_move == select_child(state, node, root)->node_move)
 			// 	std::cout<<"error: select same node"<<std::endl;
-			node = select_child(state, node, root, 0.5);
+			node = select_child(state, node, 0.5);
 			// std::cout<<node->children.size()<<std::endl;;
 		}
 			
@@ -298,18 +298,26 @@ public:
 			backpropagation(current_node, result);
 		}
 		board current_board(state);
-		Node *best_node = select_child(current_board, root, root, 0.000000000001);
-
-		action::place best_move = best_node->node_move;
-		delete root;
-		
-		if(best_move)
+		Node *best_node = select_child(current_board, root, -0.000000001);
+		// action::place best_move = best_node->node_move;
+		action::place best_move;
+		if(best_node)
+		{
+			best_move = best_node->node_move;
+			delete root;
 			return best_move;
+		}
 		else
 		{
-			// std::cout<<state<<std::endl;
+			delete root;
 			return action();
 		}
+		
+		
+		// if(best_move)
+		// 	return best_move;
+		// else
+		// 	return action();
 		
 	}
 	
