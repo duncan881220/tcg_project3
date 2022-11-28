@@ -22,7 +22,7 @@ int main(int argc, const char* argv[]) {
 	std::copy(argv, argv + argc, std::ostream_iterator<const char*>(std::cout, " "));
 	std::cout << std::endl << std::endl;
 
-	size_t total = 1000, block = 0, limit = 0;
+	size_t total = 20, block = 0, limit = 0;
 	std::string black_args, white_args;
 	std::string load_path, save_path;
 	std::string name = "TCG-HollowNoGo-Demo", version = "2022"; // for GTP shell
@@ -69,8 +69,11 @@ int main(int argc, const char* argv[]) {
 		if (stats.is_finished()) stats.summary();
 	}
 
-	player black("name=black " + black_args + " role=black");
+	// player black("name=black " + black_args + " role=black");
 	player white("name=white " + white_args + " role=white");
+
+	MCTSplayer black("name=black " + black_args + " role=black");
+	// MCTSplayer white("name=white " + white_args + " role=white");
 
 	if (!shell) { // launch standard local games
 		while (!stats.is_finished()) {
@@ -89,7 +92,7 @@ int main(int argc, const char* argv[]) {
 			}
 			agent& win = game.last_turns(black, white);
 			stats.close_episode(win.name());
-
+			std::cout<<win.name()<<std::endl;
 			black.close_episode(win.name());
 			white.close_episode(win.name());
 		}

@@ -137,6 +137,8 @@ public:
 		return place(p.x, p.y, who);
 	}
 
+	piece_type get_who_take_turn(){	return attr.who_take_turns;}
+
 	/**
 	 * calculate the liberty of the block of piece at [x][y]
 	 * return >= 0 if [x][y] is placed by who; otherwise return -1
