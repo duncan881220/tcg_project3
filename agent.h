@@ -118,7 +118,7 @@ public:
 			std::cout<<"mcts player init"<<std::endl;
 		if(meta.find("T") != meta.end())
 			simulation_times = meta["T"];
-		std::cout<<"simulation_times: "<< simulation_times <<std::endl;
+		// std::cout<<"simulation_times: "<< simulation_times <<std::endl;
 	}
 
 
@@ -203,12 +203,12 @@ public:
 		std::shuffle(space.begin(), space.end(), engine);
 		// std::cout<<"start expand for"<<std::endl;
 		for (const action::place& move : space) 
-		{	
-			Node* newNode = new Node();
+		{		
 			board after = state;
 			board::piece_type current_placer = reverse_player(node->placer);
 			if(after.place(move.position()) == board::legal)
 			{
+				Node* newNode = new Node();
 				newNode->node_move = move;
 				newNode->placer = current_placer;
 				newNode->parent = node;
